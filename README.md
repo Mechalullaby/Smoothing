@@ -1,0 +1,2 @@
+# Smoothing with basis expansions and penalties
+Smoothing and function estimation play important parts in applied statistics and data science. One approach combines basis expansions and penalized regression, both techniques with much wider application.
