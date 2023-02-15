@@ -86,6 +86,7 @@ fit.pspline <- function(x,y,k=20,sp,bord=3,pord=2){
   V <- solve(R, U %*% (A %*% (t(U) %*% t(R_inv)))) * sig2
   stde <- rowSums(X * (X %*% V))^.5
   
+  class(output) <- "pspline"
   # return the list
   list(coef = beta_hat, fitted = fit_value, sig2 = sig2, gcv = gcv, edf = kappa,
        bord = bord, pord = pord, coefficients = k, r2 = r2, V = V, se = stde, 
@@ -119,6 +120,7 @@ pspline <- function(x,y,k=20,logsp=c(-5,5),bord=3,pord=2,ngrid=100){
   }
   # find the largest lambda with the minmum gcv and return the model fit
   opt_gcv <- max(which(gcv == min(gcv)))
+  class(output) <- "pspline"
   fit.pspline(x,y,sp = sp[opt_gcv])
 }
 
@@ -133,7 +135,7 @@ print.pspline <- function(m){
       ' penalty\nEffective degrees of freedom: ',{m$edf},
       '    Coefficients: ',{m$coefficients},'\nresidual std dev: ',
       {sqrt(m$sig2)},'    r-squared: ',{m$r2},'   GCV: ',{m$gcv},sep = '')
-  
+  class(output) <- "pspline"
   invisible(list(gcv = m$gcv, edf = m$edf, r2 = m$r2))
 }
 
@@ -160,6 +162,7 @@ predict.pspline <- function(m,x,se=TRUE){
     pred_value <- Xp %*% m$coef # the fitted value
     stde <- rowSums(Xp * (Xp %*% m$V))^.5 # corresponding standard error
     
+    class(output) <- "pspline"
     # judge whether se is needed
     if (se) {
       list(fit = pred_value, se = stde)
@@ -213,6 +216,7 @@ plot.pspline <- function(m){
   qqnorm(Residuals)
   qqline(Residuals, col = 2, lty = 2)
   
+  class(output) <- "pspline"
   # return the list silently
   invisible(list(ll = ll, ul = ul, x = m$x))
 }
